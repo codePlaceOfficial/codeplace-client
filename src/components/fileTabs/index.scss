@@ -1,0 +1,11 @@
+.c_fileTabs_wrapper{
+    width: 100%;
+}
+
+.c_filetabs_deleteIcon{
+    margin: 10px;
+    padding: 3px;
+    &:hover{
+        background-color: rgba($color: #999, $alpha: .5);
+    }
+}
