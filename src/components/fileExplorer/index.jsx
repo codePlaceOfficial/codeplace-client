@@ -3,7 +3,7 @@ import "./index.scss"
 import File from "./file"
 import FileMenu from "./fileMenu"
 import { useSelector } from 'react-redux';
-import { selectFiles } from "redux/reducer/virtualFile"
+import { selectFiles } from "redux/reducer/sandbox"
 
 /** 
 * TODO

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { MenuContext, ListFile } from "./index";
-import { openFile } from "redux/reducer/virtualFile"
+import { openFile } from "redux/reducer/sandbox"
 import { useDispatch } from 'react-redux';
 
 export default function File(props) {

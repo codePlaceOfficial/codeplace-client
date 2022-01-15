@@ -1,6 +1,7 @@
 import React, { createRef, useEffect, useMemo, useImperativeHandle } from 'react'
 import { Terminal } from 'xterm';
 import 'xterm/css/xterm.css'
+import {sandboxSocket} from "api/socket"
 
 function WebTerminal(props, parentRef) {
     const terminal = createRef();
@@ -10,6 +11,12 @@ function WebTerminal(props, parentRef) {
     useEffect(() => {
         // 初始化xterm
         xterm.open(terminal.current);
+        xterm.onData((data) => {
+            sandboxSocket.emit("write",data);
+        })
+        sandboxSocket.on("data",(data) => {
+            xterm.write(data);
+        })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

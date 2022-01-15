@@ -6,7 +6,7 @@ import DeleteIcon from './DeleteIcon';
 import "./index.scss"
 
 import { useSelector } from 'react-redux';
-import { selectOpenFiles,closeFile } from "redux/reducer/virtualFile"
+import { selectOpenFiles,closeFile } from "redux/reducer/sandbox"
 import { useDispatch } from 'react-redux';
 
 export default function ScrollableTabsButtonForce() {

@@ -1,7 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
+import {sandboxSocket} from "api/socket/index.js"
+
 
 export const slice = createSlice({
-  name: 'virtualFile',
+  name: 'sandbox',
   initialState: {
     files:{
         type: "DIR",
@@ -70,7 +72,7 @@ export const slice = createSlice({
 
 export const { openFile,closeFile } = slice.actions;
 
-export const selectFiles = state => state.virtualFile.files
-export const selectOpenFiles = state => state.virtualFile.openFiles
+export const selectFiles = state => state.sandbox.files
+export const selectOpenFiles = state => state.sandbox.openFiles
 
 export default slice.reducer;

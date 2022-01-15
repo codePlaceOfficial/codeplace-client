@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import virtualFile  from './reducer/virtualFile'
+import sandbox  from './reducer/sandbox'
 export default configureStore({
-  reducer: {virtualFile}
+  reducer: {sandbox}
 })

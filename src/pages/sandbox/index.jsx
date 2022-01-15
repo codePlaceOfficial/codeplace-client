@@ -2,7 +2,7 @@ import React from 'react';
 import FileExplorer from 'components/fileExplorer'
 import FileTabs from "components/fileTabs"
 import CodeEditor from "components/codeEditor"
-import Terminal from "../../components/terminal"
+import Terminal from "components/terminal"
 import Layout from './Layout';
 
 // 把tabs和Editor合起来
