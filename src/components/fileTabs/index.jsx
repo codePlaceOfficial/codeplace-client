@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import DeleteIcon from './DeleteIcon';
 import "./index.scss"
 
-import { useSelector } from 'react-redux';
 import { selectOpenFiles,closeFile } from "redux/reducer/sandbox"
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 
 export default function ScrollableTabsButtonForce() {
     const [value, setValue] = useState(0);
@@ -18,7 +17,6 @@ export default function ScrollableTabsButtonForce() {
     // useEffect(() => {
     //     setTabs(openFiles);
     // }, [openFiles])
-
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -37,7 +35,7 @@ export default function ScrollableTabsButtonForce() {
                     {/* TODO 增加tab栈,删除一个就弹出上一个访问的tab，并且可以根据路径去搜索 */}
                     {openFiles?.map(tab => {
                         return <Tab key={tab.path} icon={<DeleteIcon onDelete={
-                            () => dispatch(closeFile({path:tab.path}))
+                            () => {dispatch(closeFile({path:tab.path}));setValue(0)}
                         } />} iconPosition="end" label={tab.name} />
                     })}
                 </Tabs>

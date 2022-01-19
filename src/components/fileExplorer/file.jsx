@@ -49,11 +49,9 @@ export default function File(props) {
         onDrop={isDir ? e => {
             e.preventDefault()
             e.stopPropagation()
-            console.log(file.__path);
-            console.log(e.dataTransfer.getData("path"))
         } : null}
     >
         {file.name}
-        {(isDir && open === true) ? <ListFile fileList={file.children}></ListFile> : ""}
+        {(isDir && open === true) ? <ListFile fileList={file?.children}></ListFile> : ""}
     </div>
 }

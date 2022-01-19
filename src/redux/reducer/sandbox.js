@@ -1,78 +1,42 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {sandboxSocket} from "api/socket/index.js"
-
-
+import _ from "loadsh"
 export const slice = createSlice({
-  name: 'sandbox',
-  initialState: {
-    files:{
-        type: "DIR",
-        name: "",
-        __path: "/",
-        children: [
-            { type: "FILE", name: "file1.txt", __path: "/file1.txt" },
-            { type: "FILE", name: "file2.txt", __path: "/file2.txt" },
-            { type: "DIR", name: "dir1", __path: "/dir1", children: [] },
-            {
-                type: "DIR",
-                name: "dir2",
-                __path: "/dir2",
-                children: [
-                    {
-                        type: "FILE",
-                        name: "file3.txt",
-                        __path: "/dir2/file3.txt",
-                    },
-    
-                    {
-                        type: "DIR",
-                        name: "dir2",
-                        __path: "/dir2/dir2",
-                        children: [
-                            {
-                                type: "FILE",
-                                name: "file3.txt",
-                                __path: "/dir2/dir2/file3.txt",
-                            },
-                        ],
-                    },
-                ],
-            },
-            {
-                type: "DIR",
-                name: "dir3",
-                __path: "/dir3",
-                children: [
-                    {
-                        type: "FILE",
-                        name: "file4.txt",
-                        __path: "/dir3/file4.txt",
-                    },
-                ],
-            },
+    name: 'sandbox',
+    initialState: {
+        state: "disconnect", // connected,disconnect
+        files:{},
+        // 打开的文件
+        openFiles: [
+            // {path:,name:}
         ],
     },
-    // 打开的文件
-    openFiles:[
-        // {path:,name:}
-    ]
-  },
-  reducers: {
-    openFile:(state,actions) => {
-        state.openFiles.push(actions.payload);
+    reducers: {
+        openFile: (state, actions) => {
+            state.openFiles = _.unionWith(state.openFiles,[actions.payload],(file1,file2) => file1.path === file2.path)
+        },
+        closeFile: (state, actions) => {
+            state.openFiles = state.openFiles.filter((item, index) => {
+                if (item.path !== actions.payload.path) return true;
+                return false;
+            })
+        },
+        setConnectState: (state, actions) => {
+            if (actions.payload.connected) state.connect = "connection";
+            else state.connect = "disconnect"
+        },
+        setFiles:(state,actions) => {
+            // console.log(actions.payload.files)
+            // console.log(_.clone(actions.payload.files))
+            state.files = _.clone(actions.payload.files)
+        },  
     },
-    closeFile:(state,actions) => {
-        state.openFiles = state.openFiles.filter((item, index) => {
-            if (item.path !== actions.payload.path) return true;
-            return false;
-        })
-    }
-  },
 });
 
-export const { openFile,closeFile } = slice.actions;
+export const { openFile, closeFile, setConnectState,setFiles } = slice.actions;
 
 export const selectFiles = state => state.sandbox.files
 export const selectOpenFiles = state => state.sandbox.openFiles
+export const selectSandboxState = state => state.sandbox.state
 
+// export const selectVirtualFileClient = state => state.sandbox.virtualFileClient
 export default slice.reducer;

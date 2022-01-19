@@ -5,13 +5,10 @@ import FileMenu from "./fileMenu"
 import { useSelector } from 'react-redux';
 import { selectFiles } from "redux/reducer/sandbox"
 
-/** 
-* TODO
-* 最外层增加drag事件
-*/
+// todo 在最外层增加事件
 const ListFile = (props) => {
     const { fileList } = props
-    if (!fileList) return;
+    if (!fileList || fileList.length === 0) return null;
     return (
         fileList?.map(
             file => {
@@ -29,7 +26,7 @@ export default function Wrapper() {
             <div
                 className='c_FileExplorer_wrapper'>
                 <FileMenu menuConfig={menuConfig}></FileMenu>
-                <ListFile fileList={files.children}></ListFile>
+                <ListFile fileList={files?.children}></ListFile>
             </div>
         </MenuContext.Provider>
     )

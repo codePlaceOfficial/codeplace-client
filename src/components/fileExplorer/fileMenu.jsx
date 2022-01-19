@@ -1,8 +1,9 @@
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-
 import React, { useState, useEffect } from 'react'
+import virtualFileClient from 'common/virtualFileClient';
 
+const virtualFileEvent = require("submodules/virtualFileEvent")
 export default function FileMenu(props) {
     const { menuConfig } = props
     const [contextMenu, setContextMenu] = useState(null);
@@ -20,26 +21,25 @@ export default function FileMenu(props) {
         if (serveFile) {
             let items = [{
                 label: "rename", handler: () => {
-                    console.log("rename", serveFile);
+                    let newName = prompt("请输入名称");
+                    virtualFileEvent.emitEvent(virtualFileEvent.generateEvent.renameFileEvent(serveFile.__path, newName), virtualFileClient)
                 },
             }, {
                 label: "delete", handler: () => {
-                    console.log("delete");
+                    virtualFileEvent.emitEvent(virtualFileEvent.generateEvent.deleteFileEvent(serveFile.__path), virtualFileClient)
                 },
             }]
 
             if (serveFile.type === "DIR") {
                 items = ([{
                     label: "新建文件", handler: () => {
-                        console.log("create file");
+                        let name = prompt("请输入名称");
+                        virtualFileEvent.emitEvent(virtualFileEvent.generateEvent.createFileEvent(serveFile.__path, name), virtualFileClient)
                     },
                 }, {
                     label: "新建文件夹", handler: () => {
-                        console.log("create dir");
-                    },
-                }, {
-                    label: "上传文件", handler: () => {
-                        console.log("upload file");
+                        let name = prompt("请输入名称");
+                        virtualFileEvent.emitEvent(virtualFileEvent.generateEvent.createDirEvent(serveFile.__path, name), virtualFileClient)
                     },
                 }, ...items])
             }
