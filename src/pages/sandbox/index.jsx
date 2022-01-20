@@ -1,33 +1,51 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import FileExplorer from 'components/fileExplorer'
 import FileTabs from "components/fileTabs"
 import CodeEditor from "components/codeEditor"
 import Terminal from "components/terminal"
 import Layout from './Layout';
 import { sandboxSocket } from "api/socket"
-import  { setConnectState, setFiles } from "redux/reducer/sandbox"
-import { useDispatch } from 'react-redux';
+import { setSandboxState, setFiles, selectOpenFiles, selectSandboxState } from "redux/reducer/sandbox"
+import { useDispatch, useSelector } from 'react-redux';
 import virtualFileClient from 'common/virtualFileClient';
 const virtualFileEvent = require("submodules/virtualFileEvent")
-
+const _ = require("loadsh")
 // 把tabs和Editor合起来
 const EditorPanel = () => {
-  return (<div>
-    <FileTabs></FileTabs>
-    <CodeEditor></CodeEditor>
-  </div>)
+  return (
+    <div style={{ width: "100%", height: "100%" }}>
+      <FileTabs></FileTabs>
+      <CodeEditor></CodeEditor>
+    </div>)
 }
 function Sandbox() {
   const dispatch = useDispatch();
+  const openFiles = useSelector(selectOpenFiles);
+  const sandboxState = useSelector(selectSandboxState);
 
+  // 监听，只更改已打开文件的内容
+  useEffect(
+    () => {
+      if (sandboxState === "ready") {
+        virtualFileClient.subscribe(virtualFileEvent.EVENT_TYPE.fileChange, (data) => {
+          if (_.findIndex(openFiles, (file) => file.__path !== data.virtualPath)) {
+            virtualFileEvent.emitEvent(virtualFileEvent.generateEvent.getFileContentEvent(data.virtualPath), virtualFileClient);
+          }
+        })
+      }
+    }, [sandboxState, openFiles]
+  )
+  
+  useEffect(() => {
+    console.log(openFiles);
+  }, [openFiles])
   useEffect(() => {
     sandboxSocket.on("connect", () => {
-      dispatch(setConnectState({ connected: true }));
       // todo 改变状态
       sandboxSocket.on("virtualFileServerReady", () => {
         sandboxSocket.on("disconnect", () => {
           // todo 断线重连
-          dispatch(setConnectState({ connected: false }));
+          dispatch(setSandboxState({ state: "disconnected" }));
         })
 
         virtualFileEvent.setEventEmiter((event) => {
@@ -36,16 +54,17 @@ function Sandbox() {
 
         sandboxSocket.on("serverFileEvent", (event) => {
           virtualFileEvent.clientDefaultExecEvent(event, virtualFileClient);
-          // console.log(virtualFileClient.getVirtualFile())
           dispatch(setFiles({ files: virtualFileClient.getVirtualFile() }));
         })
-
+        // 初始化完毕
+        dispatch(setSandboxState({ state: "ready" }));
         sandboxSocket.emit("virtualFileClientReady")
       })
     })
 
     return () => {
       dispatch(setFiles({ files: {} }));
+      sandboxSocket.disconnect();
     }
   }, [dispatch])
 
