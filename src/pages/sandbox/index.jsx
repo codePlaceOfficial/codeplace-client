@@ -28,17 +28,14 @@ function Sandbox() {
     () => {
       if (sandboxState === "ready") {
         virtualFileClient.subscribe(virtualFileEvent.EVENT_TYPE.fileChange, (data) => {
-          if (_.findIndex(openFiles, (file) => file.__path !== data.virtualPath)) {
+          if (_.indexOf(openFiles,data.virtualPath) !== -1) { // 如果改变的文件内容，在打开的文件之中，就更新
             virtualFileEvent.emitEvent(virtualFileEvent.generateEvent.getFileContentEvent(data.virtualPath), virtualFileClient);
           }
         })
       }
     }, [sandboxState, openFiles]
   )
-  
-  useEffect(() => {
-    console.log(openFiles);
-  }, [openFiles])
+
   useEffect(() => {
     sandboxSocket.on("connect", () => {
       // todo 改变状态

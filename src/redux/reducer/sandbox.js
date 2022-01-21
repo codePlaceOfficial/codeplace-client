@@ -8,9 +8,10 @@ export const slice = createSlice({
         files: {},
         // 打开的文件
         openFiles: [
-            // {path:,name:}
+            // path
         ],
-        workFile:null // 当前正在浏览的文件
+        workFile: null, // 当前正在浏览的文件
+        editorContents: {} // 编辑器中的值
     },
     reducers: {
         openFile: (state, actions) => {
@@ -21,8 +22,8 @@ export const slice = createSlice({
             }
         },
         closeFile: (state, actions) => {
-            state.openFiles = state.openFiles.filter((item, index) => {
-                return item !== actions.payload.path
+            state.openFiles = state.openFiles.filter((path, index) => {
+                return path !== actions.payload.path
             })
         },
         setSandboxState: (state, actions) => {
@@ -31,23 +32,31 @@ export const slice = createSlice({
         setFiles: (state, actions) => {
             state.files = _.clone(actions.payload.files)
         },
-        setWorkFile:(state,actions) => {
+        setWorkFile: (state, actions) => {
             state.workFile = actions.payload.path
+        },
+        setEditorContent: (state, actions) => {
+            // selector是根据===比较对象是否相同的,已有对象的话就不创建了,防止进入死循环
+            if (!state.editorContents[actions.payload.path]) {
+                state.editorContents[actions.payload.path] = { content: actions.payload.content };
+            }else {
+                if (state.editorContents[actions.payload.path].content !== actions.payload.content)
+                    state.editorContents[actions.payload.path].content = actions.payload.content;
+            }
+            console.log(actions.payload);
+            let { targetObj } = virtualFileClient.__getFileObjByPath(actions.payload.path);
+            // 判断内容是否被修改过
+            state.editorContents[actions.payload.path].isChange = actions.payload.content !== targetObj.content;
         }
     },
 });
 
-export const { openFile, closeFile, setSandboxState, setFiles,setWorkFile } = slice.actions;
+export const { openFile, closeFile, setSandboxState, setFiles, setWorkFile, setEditorContent } = slice.actions;
 
 export const selectFiles = state => state.sandbox.files
-export const selectOpenFiles = state => {
-    return (state.sandbox.openFiles.map(item => {
-        let {targetObj} = virtualFileClient.__getFileObjByPath(item,state.files);
-        return targetObj;
-    }))
-}
+export const selectOpenFiles = state => state.sandbox.openFiles
 export const selectSandboxState = state => state.sandbox.sandboxState
 export const selectWorkFile = state => state.sandbox.workFile
+export const selectEditorContents = state => state.sandbox.editorContents
 
-// export const selectVirtualFileClient = state => state.sandbox.virtualFileClient
 export default slice.reducer;
