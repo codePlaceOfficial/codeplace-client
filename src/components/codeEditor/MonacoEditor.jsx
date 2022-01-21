@@ -19,10 +19,14 @@ export default function CodeEditor(props) {
 
     useEffect(() => {
         editorRef.current = monaco.editor.create(editorContainerRef.current)
-        editorRef.current.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, function () {
-            console.log('SAVE pressed!')
-        })
     }, [])
+
+    useEffect(() => {
+        editorRef.current.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, function () {
+            console.log("======",workFile);
+            virtualFileEvent.emitEvent(virtualFileEvent.generateEvent.setFileContentEvent(workFile,models.current[workFile].getValue()),virtualFileClient)
+        })
+    },[workFile])
 
     const openFilesRaw = useMemo(() => {
         return openFiles.map(filePath => {
@@ -54,7 +58,6 @@ export default function CodeEditor(props) {
                 // 监听model内容变化,将变化写入model中
                 newModel.onDidChangeContent((event) => {
                     dispatch(setEditorContent({ path: file.__path, content: newModel.getValue() }))
-                    // virtualFileEvent.emitEvent(virtualFileEvent.generateEvent.setFileContentEvent(file.__path,newModel.getValue()),virtualFileClient)
                 })
                 editorRef.current.setModel(newModel);
             }else{  
