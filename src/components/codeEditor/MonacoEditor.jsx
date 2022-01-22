@@ -1,7 +1,7 @@
-import React, { useRef, useEffect, useMemo } from 'react'
+import React, { useRef, useEffect } from 'react'
 import * as monaco from 'monaco-editor'
 
-import { selectworkFilePath, setEditorContent, selectEditorContents, selectFiles, selectOpenFiles } from "redux/reducer/sandbox"
+import { selectworkFilePath, setEditorContent, selectEditorContents, selectOpenFiles } from "redux/reducer/sandbox"
 import { useSelector, useDispatch } from 'react-redux';
 import virtualFileClient from 'common/virtualFileClient';
 import _ from "loadsh"
@@ -44,15 +44,15 @@ export default function CodeEditor(props) {
                 // 新打开了文件
                 let newModel = monaco.editor.createModel(file.content);
                 models.current[file.__path] = newModel;
-                dispatch(setEditorContent({ path: file.__path, content: file.content }))
                 // 监听model内容变化,将变化写入model中
                 newModel.onDidChangeContent((event) => {
                     dispatch(setEditorContent({ path: file.__path, content: newModel.getValue() }))
                 })
                 editorRef.current.setModel(newModel);
             } else {
-                if (file.content !== models.current[file.__path])
+                if (file.content !== models.current[file.__path].getValue()){
                     dispatch(setEditorContent({ path: file.__path, content: file.content }))
+                }
             }
         });
     }, [openFiles, dispatch])

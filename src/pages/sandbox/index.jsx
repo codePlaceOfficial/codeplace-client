@@ -1,11 +1,11 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import FileExplorer from 'components/fileExplorer'
 import FileTabs from "components/fileTabs"
 import CodeEditor from "components/codeEditor"
 import Terminal from "components/terminal"
 import Layout from './Layout';
 import { sandboxSocket } from "api/socket"
-import { setSandboxState, setFiles, selectOpenFilesPath, selectSandboxState } from "redux/reducer/sandbox"
+import { setSandboxState, setFiles, selectOpenFilesPath, selectSandboxState,deleteFile } from "redux/reducer/sandbox"
 import { useDispatch, useSelector } from 'react-redux';
 import virtualFileClient from 'common/virtualFileClient';
 const virtualFileEvent = require("submodules/virtualFileEvent")
@@ -29,11 +29,16 @@ function Sandbox() {
       if (sandboxState === "ready") {
         virtualFileClient.subscribe(virtualFileEvent.EVENT_TYPE.fileChange, (data) => {
           if (_.indexOf(openFilesPath,data.virtualPath) !== -1) { // 如果改变的文件内容，在打开的文件之中，就更新
-            // virtualFileEvent.emitEvent(virtualFileEvent.generateEvent.getFileContentEvent(data.virtualPath), virtualFileClient);
+            virtualFileEvent.emitEvent(virtualFileEvent.generateEvent.getFileContentEvent(data.virtualPath), virtualFileClient);
           }
         })
+
+        virtualFileClient.subscribe(virtualFileEvent.EVENT_TYPE.deleteFile, (data) => {
+          console.log(data);
+          dispatch(deleteFile({virtualPath:data.virtualPath}))
+        })
       }
-    }, [sandboxState, openFilesPath]
+    }, [sandboxState, openFilesPath,dispatch]
   )
 
   useEffect(() => {
@@ -49,9 +54,11 @@ function Sandbox() {
           sandboxSocket.emit("clientFileEvent", event)
         }, virtualFileClient);
 
+        // note 需要修改
         sandboxSocket.on("serverFileEvent", (event) => {
           virtualFileEvent.clientDefaultExecEvent(event, virtualFileClient);
-          dispatch(setFiles({ files: virtualFileClient.getVirtualFile() }));
+          if(event.eventType !== virtualFileEvent.EVENT_TYPE.fileChange)
+            dispatch(setFiles({ files: virtualFileClient.getVirtualFile() }));
         })
         // 初始化完毕
         dispatch(setSandboxState({ state: "ready" }));

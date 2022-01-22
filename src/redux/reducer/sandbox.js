@@ -25,6 +25,9 @@ export const slice = createSlice({
             state.openFilesPath = state.openFilesPath.filter((path, index) => {
                 return path !== actions.payload.path
             })
+            if(state.workFilePath === actions.payload.path){
+                state.workFilePath = null;
+            }
         },
         setSandboxState: (state, actions) => {
             state.sandboxState = actions.payload.state;
@@ -34,6 +37,12 @@ export const slice = createSlice({
         },
         setworkFilePath: (state, actions) => {
             state.workFilePath = actions.payload.path
+        },
+        deleteEditorContent:(state,actions) => {
+            let virtualPath = actions.payload.virtualPath;
+            if(!!state.editorContents[virtualPath]){
+                delete state.editorContents[virtualPath]
+            }
         },
         setEditorContent: (state, actions) => {
             // selector是根据===比较对象是否相同的,已有对象的话就不创建了,防止进入死循环
@@ -51,7 +60,11 @@ export const slice = createSlice({
     },
 });
 
-export const { openFile, closeFile, setSandboxState, setFiles, setworkFilePath, setEditorContent } = slice.actions;
+export const { openFile, closeFile, setSandboxState, setFiles, setworkFilePath, setEditorContent,deleteEditorContent } = slice.actions;
+export const deleteFile = ({virtualPath}) => (dispatch) => {
+    dispatch(closeFile({path:virtualPath}));
+    dispatch(deleteEditorContent({virtualPath}))
+}
 
 export const selectFiles = state => state.sandbox.files
 export const selectOpenFilesPath = state => state.sandbox.openFilesPath
@@ -60,10 +73,15 @@ export const selectworkFilePath = state => state.sandbox.workFilePath
 export const selectEditorContents = state => state.sandbox.editorContents
 
 export const selectOpenFiles = createSelector([selectFiles,selectOpenFilesPath],(files,openFilesPath) => {
-    return openFilesPath.map(filePath => {
+    let openFiles = [];
+    for(let filePath of openFilesPath){
         let { targetObj } = virtualFileClient.__getFileObjByPath(filePath, files);
-        return { __path: targetObj.__path,name:targetObj.name,content: targetObj.content }
-    });
+        if(targetObj){
+            openFiles.push({ __path: targetObj.__path,name:targetObj.name,content: targetObj.content });
+        }
+    }
+
+    return openFiles;
 })
 
 export default slice.reducer;
