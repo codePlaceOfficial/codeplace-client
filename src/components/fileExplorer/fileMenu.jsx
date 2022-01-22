@@ -1,7 +1,7 @@
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import React, { useState, useEffect } from 'react'
-import virtualFileClient from 'common/virtualFileClient';
+import {eventEmitter} from "common/virtualFileClient"
 
 const virtualFileEvent = require("submodules/virtualFileEvent")
 export default function FileMenu(props) {
@@ -22,11 +22,11 @@ export default function FileMenu(props) {
             let items = [{
                 label: "rename", handler: () => {
                     let newName = prompt("请输入名称");
-                    virtualFileEvent.emitEvent(virtualFileEvent.generateEvent.renameFileEvent(serveFile.__path, newName), virtualFileClient)
+                    eventEmitter.emitEvent(virtualFileEvent.generateEvent.renameFileEvent(serveFile.__path, newName))
                 },
             }, {
                 label: "delete", handler: () => {
-                    virtualFileEvent.emitEvent(virtualFileEvent.generateEvent.deleteFileEvent(serveFile.__path), virtualFileClient)
+                    eventEmitter.emitEvent(virtualFileEvent.generateEvent.deleteFileEvent(serveFile.__path))
                 },
             }]
 
@@ -34,12 +34,12 @@ export default function FileMenu(props) {
                 items = ([{
                     label: "新建文件", handler: () => {
                         let name = prompt("请输入名称");
-                        virtualFileEvent.emitEvent(virtualFileEvent.generateEvent.createFileEvent(serveFile.__path, name), virtualFileClient)
+                        eventEmitter.emitEvent(virtualFileEvent.generateEvent.createFileEvent(serveFile.__path, name))
                     },
                 }, {
                     label: "新建文件夹", handler: () => {
                         let name = prompt("请输入名称");
-                        virtualFileEvent.emitEvent(virtualFileEvent.generateEvent.createDirEvent(serveFile.__path, name), virtualFileClient)
+                        eventEmitter.emitEvent(virtualFileEvent.generateEvent.createDirEvent(serveFile.__path, name))
                     },
                 }, ...items])
             }

@@ -2,8 +2,10 @@ import React, { useState, useContext } from 'react'
 import { MenuContext, ListFile } from "./index";
 import { openFile } from "redux/reducer/sandbox"
 import { useDispatch } from 'react-redux';
-import virtualFileClient from 'common/virtualFileClient';
+import {eventEmitter} from "common/virtualFileClient"
+
 const virtualFileEvent = require("submodules/virtualFileEvent")
+
 export default function File(props) {
     const { file } = props
     const [open, setOpen] = useState(false);
@@ -16,7 +18,7 @@ export default function File(props) {
             // 左键
             if (isDir) setOpen(!open);
             else {
-                virtualFileEvent.emitEvent(virtualFileEvent.generateEvent.getFileContentEvent(file.__path),virtualFileClient)
+                eventEmitter.emitEvent(virtualFileEvent.generateEvent.getFileContentEvent(file.__path))
                 dispatch(openFile({path:file.__path}))
             }
         } else {

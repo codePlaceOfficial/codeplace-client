@@ -8,8 +8,11 @@ import { sandboxSocket } from "api/socket"
 import { setSandboxState, setFiles, selectOpenFilesPath, selectSandboxState,deleteFile } from "redux/reducer/sandbox"
 import { useDispatch, useSelector } from 'react-redux';
 import virtualFileClient from 'common/virtualFileClient';
+import {eventEmitter} from "common/virtualFileClient"
 const virtualFileEvent = require("submodules/virtualFileEvent")
 const _ = require("loadsh")
+
+
 // 把tabs和Editor合起来
 const EditorPanel = () => {
   return (
@@ -22,18 +25,17 @@ function Sandbox() {
   const dispatch = useDispatch();
   const openFilesPath = useSelector(selectOpenFilesPath);
   const sandboxState = useSelector(selectSandboxState);
-
   // 监听，只更改已打开文件的内容
   useEffect(
     () => {
       if (sandboxState === "ready") {
-        virtualFileClient.subscribe(virtualFileEvent.EVENT_TYPE.fileChange, (data) => {
+        eventEmitter.subscribe(virtualFileEvent.EVENT_TYPE.fileChange, (data) => {
           if (_.indexOf(openFilesPath,data.virtualPath) !== -1) { // 如果改变的文件内容，在打开的文件之中，就更新
-            virtualFileEvent.emitEvent(virtualFileEvent.generateEvent.getFileContentEvent(data.virtualPath), virtualFileClient);
+            eventEmitter.emitEvent(virtualFileEvent.generateEvent.getFileContentEvent(data.virtualPath));
           }
         })
 
-        virtualFileClient.subscribe(virtualFileEvent.EVENT_TYPE.deleteFile, (data) => {
+        eventEmitter.subscribe(virtualFileEvent.EVENT_TYPE.deleteFile, (data) => {
           console.log(data);
           dispatch(deleteFile({virtualPath:data.virtualPath}))
         })
@@ -50,9 +52,9 @@ function Sandbox() {
           dispatch(setSandboxState({ state: "disconnected" }));
         })
 
-        virtualFileEvent.setEventEmiter((event) => {
-          sandboxSocket.emit("clientFileEvent", event)
-        }, virtualFileClient);
+        // virtualFileEvent.setEventEmiter((event) => {
+        //   sandboxSocket.emit("clientFileEvent", event)
+        // }, virtualFileClient);
 
         // note 需要修改
         sandboxSocket.on("serverFileEvent", (event) => {

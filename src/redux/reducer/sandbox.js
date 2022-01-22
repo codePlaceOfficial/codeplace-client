@@ -1,5 +1,5 @@
 import { createSlice,createSelector } from '@reduxjs/toolkit';
-import virtualFileClient from 'common/virtualFileClient';
+import {getVirtualFileByPath} from "submodules/virtualFileClient"
 import _ from "loadsh"
 export const slice = createSlice({
     name: 'sandbox',
@@ -53,7 +53,7 @@ export const slice = createSlice({
                     state.editorContents[actions.payload.path].content = actions.payload.content;
             }
             console.log(actions.payload);
-            let { targetObj } = virtualFileClient.__getFileObjByPath(actions.payload.path);
+            let { targetObj } = getVirtualFileByPath(actions.payload.path,state.files);
             // 判断内容是否被修改过
             state.editorContents[actions.payload.path].isChange = actions.payload.content !== targetObj.content;
         }
@@ -75,7 +75,7 @@ export const selectEditorContents = state => state.sandbox.editorContents
 export const selectOpenFiles = createSelector([selectFiles,selectOpenFilesPath],(files,openFilesPath) => {
     let openFiles = [];
     for(let filePath of openFilesPath){
-        let { targetObj } = virtualFileClient.__getFileObjByPath(filePath, files);
+        let { targetObj } = getVirtualFileByPath(filePath, files);
         if(targetObj){
             openFiles.push({ __path: targetObj.__path,name:targetObj.name,content: targetObj.content });
         }

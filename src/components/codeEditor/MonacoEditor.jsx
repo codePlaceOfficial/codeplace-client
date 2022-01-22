@@ -3,8 +3,8 @@ import * as monaco from 'monaco-editor'
 
 import { selectworkFilePath, setEditorContent, selectEditorContents, selectOpenFiles } from "redux/reducer/sandbox"
 import { useSelector, useDispatch } from 'react-redux';
-import virtualFileClient from 'common/virtualFileClient';
 import _ from "loadsh"
+import {eventEmitter} from "common/virtualFileClient"
 
 const virtualFileEvent = require("submodules/virtualFileEvent")
 export default function CodeEditor(props) {
@@ -21,7 +21,7 @@ export default function CodeEditor(props) {
 
     useEffect(() => {
         editorRef.current.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, function () {
-            virtualFileEvent.emitEvent(virtualFileEvent.generateEvent.setFileContentEvent(workFilePath, models.current[workFilePath].getValue()), virtualFileClient)
+            eventEmitter.emitEvent(virtualFileEvent.generateEvent.setFileContentEvent(workFilePath, models.current[workFilePath].getValue()))
         })
     }, [workFilePath])
 
