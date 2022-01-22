@@ -5,33 +5,31 @@ import Box from '@mui/material/Box';
 import DeleteIcon from './DeleteIcon';
 import "./index.scss"
 
-import { selectOpenFiles, closeFile, setWorkFile, selectWorkFile, selectFiles } from "redux/reducer/sandbox"
+import { selectOpenFilesPath, closeFile, setworkFilePath, selectworkFilePath,selectOpenFiles } from "redux/reducer/sandbox"
 import { useDispatch, useSelector } from 'react-redux';
 import _ from "loadsh"
-import virtualFileClient from 'common/virtualFileClient';
 export default function ScrollableTabsButtonForce() {
     const [value, setValue] = useState(0);
     // const [tabs, setTabs] = useState(null);
-    const openFiles = useSelector(selectOpenFiles);
-    const workFile = useSelector(selectWorkFile);
-    const files = useSelector(selectFiles);
+    const openFilesPath = useSelector(selectOpenFilesPath);
+    const workFilePath = useSelector(selectworkFilePath);
+    const openFiles = useSelector(selectOpenFiles)
     const dispatch = useDispatch();
 
     const tabs = useMemo(() => {
-        return openFiles.map(filePath => {
-            let {targetObj} = virtualFileClient.__getFileObjByPath(filePath,files);
-            return {__path:targetObj.__path,name:targetObj.name}
-        });
-    }, [files, openFiles])
+        return openFiles.map((file) => {
+            return {__path:file.__path,name:file.name};
+        })
+    }, [openFiles])
 
     const handleChange = (event, newValue) => {
-        dispatch(setWorkFile({ path: openFiles[newValue] }));
+        dispatch(setworkFilePath({ path: openFilesPath[newValue] }));
     };
 
     useEffect(() => {
-        let index = _.indexOf(openFiles, workFile)
+        let index = _.indexOf(openFilesPath, workFilePath)
         setValue(index === -1 ? 0 : index);
-    }, [workFile, openFiles])
+    }, [workFilePath, openFilesPath])
 
     return (
         <div className='c_fileTabs_wrapper'>

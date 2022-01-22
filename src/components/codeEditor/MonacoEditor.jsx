@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useMemo } from 'react'
 import * as monaco from 'monaco-editor'
 
-import { selectOpenFiles, selectWorkFile, setEditorContent, selectEditorContents, selectFiles } from "redux/reducer/sandbox"
+import { selectworkFilePath, setEditorContent, selectEditorContents, selectFiles, selectOpenFiles } from "redux/reducer/sandbox"
 import { useSelector, useDispatch } from 'react-redux';
 import virtualFileClient from 'common/virtualFileClient';
 import _ from "loadsh"
@@ -11,11 +11,9 @@ export default function CodeEditor(props) {
     const editorContainerRef = useRef(null);
     const editorRef = useRef(null);
     const models = useRef({});
-    const openFiles = useSelector(selectOpenFiles);
-    const workFile = useSelector(selectWorkFile);
+    const workFilePath = useSelector(selectworkFilePath);
     const dispatch = useDispatch();
     const editorContents = useSelector(selectEditorContents)
-    const files = useSelector(selectFiles);
 
     useEffect(() => {
         editorRef.current = monaco.editor.create(editorContainerRef.current)
@@ -23,17 +21,11 @@ export default function CodeEditor(props) {
 
     useEffect(() => {
         editorRef.current.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, function () {
-            console.log("======",workFile);
-            virtualFileEvent.emitEvent(virtualFileEvent.generateEvent.setFileContentEvent(workFile,models.current[workFile].getValue()),virtualFileClient)
+            virtualFileEvent.emitEvent(virtualFileEvent.generateEvent.setFileContentEvent(workFilePath, models.current[workFilePath].getValue()), virtualFileClient)
         })
-    },[workFile])
+    }, [workFilePath])
 
-    const openFilesRaw = useMemo(() => {
-        return openFiles.map(filePath => {
-            let { targetObj } = virtualFileClient.__getFileObjByPath(filePath, files);
-            return { __path: targetObj.__path, content: targetObj.content }
-        });
-    }, [files, openFiles])
+    const openFiles = useSelector(selectOpenFiles)
 
     useEffect(() => {
         _.forIn(editorContents, (data, path) => {
@@ -42,14 +34,12 @@ export default function CodeEditor(props) {
         })
     }, [editorContents])
 
-    // 创建model
+    // 创建和修改model
     useEffect(() => {
-        if (openFilesRaw.length === 0) {
+        if (openFiles.length === 0) {
             editorRef.current.setModel(null);
         }
-        // console.log(openFilesRaw);
-
-        openFilesRaw.forEach(file => {
+        openFiles.forEach(file => {
             if (!models.current[file.__path]) {
                 // 新打开了文件
                 let newModel = monaco.editor.createModel(file.content);
@@ -60,16 +50,17 @@ export default function CodeEditor(props) {
                     dispatch(setEditorContent({ path: file.__path, content: newModel.getValue() }))
                 })
                 editorRef.current.setModel(newModel);
-            }else{  
-                dispatch(setEditorContent({ path: file.__path, content: file.content }))
+            } else {
+                if (file.content !== models.current[file.__path])
+                    dispatch(setEditorContent({ path: file.__path, content: file.content }))
             }
         });
-    }, [openFilesRaw, dispatch])
+    }, [openFiles, dispatch])
 
     // 更换model
     useEffect(() => {
-        editorRef.current.setModel(models.current[workFile])
-    }, [workFile])
+        editorRef.current.setModel(models.current[workFilePath])
+    }, [workFilePath])
 
     return (
         <div ref={editorContainerRef} className="editor" style={{ height: "100%" }}>
