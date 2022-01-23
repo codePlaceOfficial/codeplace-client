@@ -12,7 +12,7 @@ import {
 } from "submodules/virtualFileClient"
 
 const virtualFileEvent = require("submodules/virtualFileEvent")
-const {EVENT_TYPE} = virtualFileEvent;
+const { EVENT_TYPE } = virtualFileEvent;
 
 const _closeFile = (state, actions) => {
     state.openFilesPath = state.openFilesPath.filter((path, index) => {
@@ -33,10 +33,59 @@ export const slice = createSlice({
     name: 'sandbox',
     initialState: {
         sandboxState: "disconnect", // connected,disconnect
-        files: {},
+        // files: {},
+        // temp
+        files: {
+            type: "DIR",
+            name: "",
+            __path: "/",
+            children: [
+                { type: "FILE", name: "file1.txt", __path: "/file1.txt" },
+                { type: "FILE", name: "file2.txt", __path: "/file2.txt" },
+                { type: "DIR", name: "dir1", __path: "/dir1", children: [] },
+                {
+                    type: "DIR",
+                    name: "dir2",
+                    __path: "/dir2",
+                    children: [
+                        {
+                            type: "FILE",
+                            name: "file3.txt",
+                            __path: "/dir2/file3.txt",
+                        },
+
+                        {
+                            type: "DIR",
+                            name: "dir2",
+                            __path: "/dir2/dir2",
+                            children: [
+                                {
+                                    type: "FILE",
+                                    name: "file3.txt",
+                                    __path: "/dir2/dir2/file3.txt",
+                                },
+                            ],
+                        },
+                    ],
+                },
+                {
+                    type: "DIR",
+                    name: "dir3",
+                    __path: "/dir3",
+                    children: [
+                        {
+                            type: "FILE",
+                            name: "file4.txt",
+                            __path: "/dir3/file4.txt",
+                        },
+                    ],
+                }
+            ]
+        },
         // 打开的文件
         openFilesPath: [
             // path
+            "/file2.txt","/dir2/dir2/file3.txt","/dir3/file4.txt"
         ],
         workFilePath: null, // 当前正在浏览的文件
         editorContents: {} // 编辑器中的值
@@ -49,7 +98,7 @@ export const slice = createSlice({
                 state.openFilesPath.push(actions.payload.path)
             }
         },
-        closeFile:_closeFile,
+        closeFile: _closeFile,
         setSandboxState: (state, actions) => {
             state.sandboxState = actions.payload.state;
         },
@@ -59,7 +108,7 @@ export const slice = createSlice({
         setworkFilePath: (state, actions) => {
             state.workFilePath = actions.payload.path
         },
-        deleteEditorContent:_deleteEditorContent,
+        deleteEditorContent: _deleteEditorContent,
         setEditorContent: (state, actions) => {
             // selector是根据===比较对象是否相同的,已有对象的话就不创建了,防止进入死循环
             if (!state.editorContents[actions.payload.path]) {
@@ -85,8 +134,8 @@ export const slice = createSlice({
                     renameFile(event.data.virtualPath, event.data.newName, state.files)
                     break;
                 case EVENT_TYPE.deleteFile:
-                    _closeFile(state,actions);
-                    _deleteEditorContent(state,actions)
+                    _closeFile(state, actions);
+                    _deleteEditorContent(state, actions)
                     deleteFile(event.data.virtualPath, state.files)
                     break;
                 case EVENT_TYPE.moveFile:
@@ -105,7 +154,7 @@ export const slice = createSlice({
     }
 });
 
-export const { openFile, closeFile, setSandboxState, setFiles, setworkFilePath, setEditorContent, deleteEditorContent,execFileEvent } = slice.actions;
+export const { openFile, closeFile, setSandboxState, setFiles, setworkFilePath, setEditorContent, deleteEditorContent, execFileEvent } = slice.actions;
 export const selectFiles = state => state.sandbox.files
 export const selectOpenFilesPath = state => state.sandbox.openFilesPath
 export const selectSandboxState = state => state.sandbox.sandboxState
