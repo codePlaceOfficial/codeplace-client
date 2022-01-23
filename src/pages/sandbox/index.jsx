@@ -5,7 +5,7 @@ import CodeEditor from "components/codeEditor"
 import Terminal from "components/terminal"
 import Layout from './Layout';
 import { sandboxSocket } from "api/socket"
-import { setSandboxState, setFiles, selectOpenFilesPath, selectSandboxState,deleteFile } from "redux/reducer/sandbox"
+import { setSandboxState, setFiles, selectOpenFilesPath, selectSandboxState,execFileEvent } from "redux/reducer/sandbox"
 import { useDispatch, useSelector } from 'react-redux';
 import virtualFileClient from 'common/virtualFileClient';
 import {eventEmitter} from "common/virtualFileClient"
@@ -35,10 +35,10 @@ function Sandbox() {
           }
         })
 
-        eventEmitter.subscribe(virtualFileEvent.EVENT_TYPE.deleteFile, (data) => {
-          console.log(data);
-          dispatch(deleteFile({virtualPath:data.virtualPath}))
-        })
+        // eventEmitter.subscribe(virtualFileEvent.EVENT_TYPE.deleteFile, (data) => {
+        //   console.log(data);
+        //   dispatch(deleteFile({virtualPath:data.virtualPath}))
+        // })
       }
     }, [sandboxState, openFilesPath,dispatch]
   )
@@ -58,9 +58,10 @@ function Sandbox() {
 
         // note 需要修改
         sandboxSocket.on("serverFileEvent", (event) => {
-          virtualFileEvent.clientDefaultExecEvent(event, virtualFileClient);
-          if(event.eventType !== virtualFileEvent.EVENT_TYPE.fileChange)
-            dispatch(setFiles({ files: virtualFileClient.getVirtualFile() }));
+          dispatch(execFileEvent({event}));      
+          // virtualFileEvent.clientDefaultExecEvent(event, virtualFileClient);
+          // if(event.eventType !== virtualFileEvent.EVENT_TYPE.fileChange)
+          //   dispatch(setFiles({ files: virtualFileClient.getVirtualFile() }));
         })
         // 初始化完毕
         dispatch(setSandboxState({ state: "ready" }));

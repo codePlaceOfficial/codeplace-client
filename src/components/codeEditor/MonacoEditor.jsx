@@ -39,11 +39,13 @@ export default function CodeEditor(props) {
         if (openFiles.length === 0) {
             editorRef.current.setModel(null);
         }
+        
         openFiles.forEach(file => {
             if (!models.current[file.__path]) {
                 // 新打开了文件
                 let newModel = monaco.editor.createModel(file.content);
                 models.current[file.__path] = newModel;
+                // dispatch(setEditorContent({ path: file.__path, content: newModel.getValue() }))
                 // 监听model内容变化,将变化写入model中
                 newModel.onDidChangeContent((event) => {
                     dispatch(setEditorContent({ path: file.__path, content: newModel.getValue() }))
