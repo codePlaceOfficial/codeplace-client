@@ -2,13 +2,15 @@ import React, { useState, useContext } from 'react'
 import { MenuContext, ListFile } from "./index";
 import { openFile } from "redux/reducer/sandbox"
 import { useDispatch } from 'react-redux';
-import {eventEmitter} from "common/virtualFileClient"
+import { eventEmitter } from "common/virtualFileClient"
 
 const virtualFileEvent = require("submodules/virtualFileEvent")
 
 export default function File(props) {
     const { file } = props
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
+    const [isDragHover, setDragHover] = useState(false);
+
     const { setMenu } = useContext(MenuContext);
     const isDir = file.type === "DIR" ? true : false;
     const dispatch = useDispatch();
@@ -19,14 +21,14 @@ export default function File(props) {
             if (isDir) setOpen(!open);
             else {
                 eventEmitter.emitEvent(virtualFileEvent.generateEvent.getFileContentEvent(file.__path))
-                dispatch(openFile({path:file.__path}))
+                dispatch(openFile({ path: file.__path }))
             }
         } else {
             // 右键
             setMenu({ position: { x: e.clientX, y: e.clientY }, serveFile: file })
         }
     }
-    return <div className={isDir ? 'c_FileExplorer_dir' : "c_FileExplorer_file"}
+    return <div className={`${isDir ? "dir" : ""} ${isDragHover ? "dragHover" : ""}`}
         onClick={
             (e) => {
                 e.stopPropagation();
@@ -42,13 +44,19 @@ export default function File(props) {
         onDragOver={isDir ? (e) => {
             e.preventDefault()
             e.stopPropagation()
+            setDragHover(true);
+
             if (open || e.dataTransfer.getData("path") === file.__path) return;
             setOpen(true);
         } : null}
+        onDragLeave={
+            () => {
+                setDragHover(false);
+            }
+        }
         onDragStart={e => {
             e.stopPropagation()
             e.dataTransfer.setData("path", file.__path)
-
         }}
         onDrop={isDir ? e => {
             e.preventDefault()

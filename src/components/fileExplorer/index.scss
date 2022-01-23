@@ -1,10 +1,16 @@
-.c_FileExplorer_wrapper{
-    user-select: none;
-    background-color: #000;
-    color:white;
-    height: 100%;
-    width: 100%;
-    .c_FileExplorer_dir > * {
-        padding-left: 20px;
-    }
+.c_fileExplorer_wrapper {
+	user-select: none;
+	background-color: #000;
+	color: white;
+	height: 100%;
+	width: 100%;
+	.dir {
+		& > * {
+			padding-left: 20px;
+		}
+
+        &.dragHover{
+            background-color: #999;
+        }
+	}
 }

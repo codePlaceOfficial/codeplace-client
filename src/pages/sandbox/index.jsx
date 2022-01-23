@@ -1,13 +1,11 @@
 import React, { useEffect } from 'react';
 import FileExplorer from 'components/fileExplorer'
 import FileTabs from "components/fileTabs"
-import CodeEditor from "components/codeEditor"
 import Terminal from "components/terminal"
 import Layout from './Layout';
 import { sandboxSocket } from "api/socket"
 import { setSandboxState, setFiles, selectOpenFilesPath, selectSandboxState,execFileEvent } from "redux/reducer/sandbox"
 import { useDispatch, useSelector } from 'react-redux';
-import virtualFileClient from 'common/virtualFileClient';
 import {eventEmitter} from "common/virtualFileClient"
 const virtualFileEvent = require("submodules/virtualFileEvent")
 const _ = require("loadsh")
@@ -18,7 +16,8 @@ const EditorPanel = () => {
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <FileTabs></FileTabs>
-      <CodeEditor></CodeEditor>
+      {/* temp */}
+      {/* <CodeEditor></CodeEditor> */}
     </div>)
 }
 function Sandbox() {

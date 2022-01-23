@@ -24,7 +24,7 @@ export default function Wrapper() {
     return (
         <MenuContext.Provider value={{ setMenu }}>
             <div
-                className='c_FileExplorer_wrapper'>
+                className='c_fileExplorer_wrapper'>
                 <FileMenu menuConfig={menuConfig}></FileMenu>
                 <ListFile fileList={files?.children}></ListFile>
             </div>
