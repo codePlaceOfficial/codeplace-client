@@ -8,7 +8,7 @@ export default function Layout(props) {
     const { Sider, Editor, Terminal } = props;
 
     return (
-        <SplitterLayout percentage primaryIndex={1} secondaryInitialSize={15}>
+        <SplitterLayout percentage primaryIndex={1} secondaryInitialSize={20} >
             {Sider}
             <SplitterLayout vertical percentage secondaryInitialSize={30}>
                 {Editor}

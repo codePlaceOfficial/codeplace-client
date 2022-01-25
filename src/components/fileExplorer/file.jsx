@@ -3,22 +3,30 @@ import { MenuContext, ListFile } from "./index";
 import { openFile } from "redux/reducer/sandbox"
 import { useDispatch } from 'react-redux';
 import { eventEmitter } from "common/virtualFileClient"
+import FileIcon from "components/fileIcon"
 
 const virtualFileEvent = require("submodules/virtualFileEvent")
 
 export default function File(props) {
     const { file } = props
-    const [open, setOpen] = useState(true);
-    const [isDragHover, setDragHover] = useState(false);
-
+    const [isOpen, setOpen] = useState(true);
+    // const [isDragHover, setDragHover] = useState(false);
     const { setMenu } = useContext(MenuContext);
     const isDir = file.type === "DIR" ? true : false;
     const dispatch = useDispatch();
+    // const dragOver = _.throttle((e) => {
+    //     e.preventDefault()
+    //     e.stopPropagation()
+    //     console.log(e);
+    //     setDragHover(true);
+    //     if (e.dataTransfer.getData("path") === file.__path) return;
+    //     setOpen(true);
+    // },1000,{ 'trailing': false })
 
     const click = (type, e) => {
         if (type === 0) {
             // 左键
-            if (isDir) setOpen(!open);
+            if (isDir) setOpen(!isOpen);
             else {
                 eventEmitter.emitEvent(virtualFileEvent.generateEvent.getFileContentEvent(file.__path))
                 dispatch(openFile({ path: file.__path }))
@@ -28,7 +36,7 @@ export default function File(props) {
             setMenu({ position: { x: e.clientX, y: e.clientY }, serveFile: file })
         }
     }
-    return <div className={`${isDir ? "dir" : ""} ${isDragHover ? "dragHover" : ""}`}
+    return <div className={`${isDir ? "dir" : "file"}`}
         onClick={
             (e) => {
                 e.stopPropagation();
@@ -40,30 +48,39 @@ export default function File(props) {
             e.preventDefault();
             click(1, e);
         }}
-        draggable="true"
-        onDragOver={isDir ? (e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            setDragHover(true);
 
-            if (open || e.dataTransfer.getData("path") === file.__path) return;
-            setOpen(true);
-        } : null}
-        onDragLeave={
-            () => {
-                setDragHover(false);
-            }
-        }
-        onDragStart={e => {
-            e.stopPropagation()
-            e.dataTransfer.setData("path", file.__path)
-        }}
-        onDrop={isDir ? e => {
-            e.preventDefault()
-            e.stopPropagation()
-        } : null}
+    // style={{
+    //     marginLeft:isDir ? "50px" : "0px"
+    // }}
+
+    // draggable="true"
+    // onDragOver={isDir ? dragOver : null}
+    // onDragLeave={
+    //     () => {
+    //         setDragHover(false);
+    //     }
+    // }
+    // onDragStart={e => {
+    //     e.stopPropagation()
+    //     e.dataTransfer.setData("path", file.__path)
+    // }}
+    // onDrop={isDir ? e => {
+    //     e.preventDefault()
+    //     e.stopPropagation()
+    //     dragOver.cancel();
+    //     setDragHover(false);
+    // } : null}
     >
-        {file.name}
-        {(isDir && open === true) ? <ListFile fileList={file?.children}></ListFile> : ""}
+        <div className="item">
+            {isDir ? <svg className="icon" style={{
+                transform: isOpen ? `rotate(90deg)` : ""
+            }} aria-hidden="true">
+                <use xlinkHref="#icon-arror_r"></use>
+            </svg> : ""}
+            <FileIcon name={isDir ? (isOpen ? "folder_opened" : "folder") : "file"} />
+            {file.name}
+        </div>
+
+        {(isDir && isOpen === true) ? <ListFile fileList={file?.children}></ListFile> : ""}
     </div>
 }

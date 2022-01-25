@@ -4,9 +4,12 @@ import FileTabs from "components/fileTabs"
 import Terminal from "components/terminal"
 import Layout from './Layout';
 import { sandboxSocket } from "api/socket"
-import { setSandboxState, setFiles, selectOpenFilesPath, selectSandboxState,execFileEvent } from "redux/reducer/sandbox"
+import { setSandboxState, setFiles, selectOpenFilesPath, selectSandboxState, execFileEvent } from "redux/reducer/sandbox"
 import { useDispatch, useSelector } from 'react-redux';
-import {eventEmitter} from "common/virtualFileClient"
+import { eventEmitter } from "common/virtualFileClient"
+import CodeEditor from 'components/codeEditor';
+import "./index.scss"
+
 const virtualFileEvent = require("submodules/virtualFileEvent")
 const _ = require("loadsh")
 
@@ -14,10 +17,13 @@ const _ = require("loadsh")
 // 把tabs和Editor合起来
 const EditorPanel = () => {
   return (
-    <div style={{ width: "100%", height: "100%" }}>
-      <FileTabs></FileTabs>
-      {/* temp */}
-      {/* <CodeEditor></CodeEditor> */}
+    <div className='editorPanel'>
+      <div className="editorPanel_tabs_wrapper">
+        <FileTabs />
+      </div>
+      <div className="editorPanel_editor_wrapper">
+        <CodeEditor></CodeEditor>
+      </div>
     </div>)
 }
 function Sandbox() {
@@ -29,7 +35,7 @@ function Sandbox() {
     () => {
       if (sandboxState === "ready") {
         eventEmitter.subscribe(virtualFileEvent.EVENT_TYPE.fileChange, (data) => {
-          if (_.indexOf(openFilesPath,data.virtualPath) !== -1) { // 如果改变的文件内容，在打开的文件之中，就更新
+          if (_.indexOf(openFilesPath, data.virtualPath) !== -1) { // 如果改变的文件内容，在打开的文件之中，就更新
             eventEmitter.emitEvent(virtualFileEvent.generateEvent.getFileContentEvent(data.virtualPath));
           }
         })
@@ -39,7 +45,7 @@ function Sandbox() {
         //   dispatch(deleteFile({virtualPath:data.virtualPath}))
         // })
       }
-    }, [sandboxState, openFilesPath,dispatch]
+    }, [sandboxState, openFilesPath, dispatch]
   )
 
   useEffect(() => {
@@ -57,7 +63,7 @@ function Sandbox() {
 
         // note 需要修改
         sandboxSocket.on("serverFileEvent", (event) => {
-          dispatch(execFileEvent({event}));      
+          dispatch(execFileEvent({ event }));
           // virtualFileEvent.clientDefaultExecEvent(event, virtualFileClient);
           // if(event.eventType !== virtualFileEvent.EVENT_TYPE.fileChange)
           //   dispatch(setFiles({ files: virtualFileClient.getVirtualFile() }));

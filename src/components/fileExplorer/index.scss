@@ -5,12 +5,20 @@
 	height: 100%;
 	width: 100%;
 	.dir {
-		& > * {
+		.item~* {
 			padding-left: 20px;
 		}
 
         &.dragHover{
             background-color: #999;
         }
+	}
+
+	.file,
+	.dir{
+		& .item{
+			display: flex;
+			align-items: center;
+		}
 	}
 }

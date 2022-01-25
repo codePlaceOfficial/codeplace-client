@@ -16,7 +16,10 @@ export default function CodeEditor(props) {
     const editorContents = useSelector(selectEditorContents)
 
     useEffect(() => {
-        editorRef.current = monaco.editor.create(editorContainerRef.current)
+        editorRef.current = monaco.editor.create(editorContainerRef.current,{
+            theme: "vs-dark",
+            automaticLayout: true,
+        })
     }, [])
 
     useEffect(() => {
@@ -65,7 +68,7 @@ export default function CodeEditor(props) {
     }, [workFilePath])
 
     return (
-        <div ref={editorContainerRef} className="editor" style={{ height: "100%" }}>
+        <div ref={editorContainerRef} className="editor" style={{ height: "100%"}}>
 
         </div>
     );

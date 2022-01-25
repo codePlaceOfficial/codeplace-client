@@ -1,0 +1,13 @@
+.editorPanel {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+    .editorPanel_tabs_wrapper{
+        height: 40px;
+    }
+	.editorPanel_editor_wrapper {
+        height: calc(100% - 40px);
+	}
+}

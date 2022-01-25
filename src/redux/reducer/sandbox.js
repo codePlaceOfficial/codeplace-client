@@ -19,7 +19,7 @@ const _closeFile = (state, actions) => {
         return path !== actions.payload.path
     })
     if (state.workFilePath === actions.payload.path) {
-        state.workFilePath = null;
+        state.workFilePath = state.openFilesPath[0];
     }
 }
 const _deleteEditorContent = (state, actions) => {
@@ -33,59 +33,10 @@ export const slice = createSlice({
     name: 'sandbox',
     initialState: {
         sandboxState: "disconnect", // connected,disconnect
-        // files: {},
-        // temp
-        files: {
-            type: "DIR",
-            name: "",
-            __path: "/",
-            children: [
-                { type: "FILE", name: "file1.txt", __path: "/file1.txt" },
-                { type: "FILE", name: "file2.txt", __path: "/file2.txt" },
-                { type: "DIR", name: "dir1", __path: "/dir1", children: [] },
-                {
-                    type: "DIR",
-                    name: "dir2",
-                    __path: "/dir2",
-                    children: [
-                        {
-                            type: "FILE",
-                            name: "file3.txt",
-                            __path: "/dir2/file3.txt",
-                        },
-
-                        {
-                            type: "DIR",
-                            name: "dir2",
-                            __path: "/dir2/dir2",
-                            children: [
-                                {
-                                    type: "FILE",
-                                    name: "file3.txt",
-                                    __path: "/dir2/dir2/file3.txt",
-                                },
-                            ],
-                        },
-                    ],
-                },
-                {
-                    type: "DIR",
-                    name: "dir3",
-                    __path: "/dir3",
-                    children: [
-                        {
-                            type: "FILE",
-                            name: "file4.txt",
-                            __path: "/dir3/file4.txt",
-                        },
-                    ],
-                }
-            ]
-        },
+        files: {},
         // 打开的文件
         openFilesPath: [
             // path
-            "/file2.txt","/dir2/dir2/file3.txt","/dir3/file4.txt"
         ],
         workFilePath: null, // 当前正在浏览的文件
         editorContents: {} // 编辑器中的值
