@@ -7,21 +7,21 @@ const classNames = require('classnames');
 export function Tabs(props) {
     const { children, index, onChange } = props;
     const [activeIndex, setActiveIndex] = useState(index);
-    useEffect(() => {
-        setActiveIndex(index);
-    },[index])
+
     useEffect(() => {
         if (onChange)
             onChange(activeIndex)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeIndex])
 
-    // useEffect(() => {
-    //     setActiveIndex(index);
-    // }, [index])
+    useEffect(() => {
+        setActiveIndex(index);
+    }, [index])
+
     return (
         <OverlayScrollbarsComponent className="os-theme-light"
             options={{ scrollbars: { autoHide: "m" }, overflowBehavior: { y: "h" }, clipAlways: false }}
+            style={{height:"100%"}} // fix ui
         >
             <div className="tabs">
                 {children.map((child, index) => {
@@ -33,16 +33,17 @@ export function Tabs(props) {
 }
 
 export function Tab(props) {
-    const { onClick, onClose, active, name } = props;
+    const { onClick, onClose, active, name,isChange } = props;
+    
 
-    const isChange = false;
     return (
-        <div className={classNames("tab", { "active": active, "change": isChange })} onClick={onClick}>
+        <div className={classNames("tab", { "active": active, "change": isChange  })} onClick={onClick}>
             <div className="left">
                 <FileIcon name="file" />
             </div>
             <div className="label">{name}</div>
             <div className="right">
+                {/* temp */}
                 {isChange ? <div className="change" /> : <DeleteIcon onDelete={onClose} />}
             </div>
         </div>

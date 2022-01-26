@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Tabs, Tab } from "./tabs"
 import "./index.scss"
 
-import { selectOpenFilesPath, closeFile, setworkFilePath, selectworkFilePath, selectOpenFiles } from "redux/reducer/sandbox"
+import { selectOpenFilesPath, closeFile, setworkFilePath, selectworkFilePath, selectOpenFiles,selectEditorContents } from "redux/reducer/sandbox"
 import { useDispatch, useSelector } from 'react-redux';
 import _ from "loadsh"
 
@@ -11,25 +11,23 @@ export default function ScrollableTabsButtonForce() {
     // const [tabs, setTabs] = useState(null);
     const openFilesPath = useSelector(selectOpenFilesPath);
     const workFilePath = useSelector(selectworkFilePath);
-    const openFiles = useSelector(selectOpenFiles)
+    const openFiles = useSelector(selectOpenFiles);
+    const editorContents = useSelector(selectEditorContents);
     const dispatch = useDispatch();
 
     const tabs = useMemo(() => {
         return openFiles.map((file) => {
-            return { __path: file.__path, name: file.name };
+            return { __path: file.__path, name: file.name,isChange:editorContents[file.__path]?.isChange };
         })
-    }, [openFiles])
+    }, [openFiles,editorContents])
 
 
     useEffect(() => {
         let index = _.indexOf(openFilesPath, workFilePath)
         setValue(index === -1 ? 0 : index);
-        console.log("===",index);
-
     }, [workFilePath, openFilesPath])
 
     const handleChange = (newValue) => {
-        console.log(newValue);
         dispatch(setworkFilePath({ path: openFilesPath[newValue] }));
     }
     return (
@@ -60,7 +58,7 @@ export default function ScrollableTabsButtonForce() {
                         onChange={handleChange}
                     >
                         {tabs?.map((tab, index) => {
-                            return <Tab key={tab.__path} name={tab.name} onClose={
+                            return <Tab key={tab.__path} name={tab.name} isChange={tab.isChange} onClose={
                                 () => {
                                     dispatch(closeFile({ path: tab.__path }));
                                 }
