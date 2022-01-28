@@ -3,7 +3,7 @@ import { MenuContext, ListFile } from "./index";
 import { openFile } from "redux/reducer/sandbox"
 import { useDispatch } from 'react-redux';
 import { eventEmitter } from "common/virtualFileClient"
-import FileIcon from "components/fileIcon"
+import {FileIcon,DirIcon} from "components/fileIcon"
 
 const virtualFileEvent = require("submodules/virtualFileEvent")
 
@@ -77,7 +77,9 @@ export default function File(props) {
             }} aria-hidden="true">
                 <use xlinkHref="#icon-arror_r"></use>
             </svg> : ""}
-            <FileIcon name={isDir ? (isOpen ? "folder_opened" : "folder") : "file"} />
+            {/* <FileIcon name={isDir ? (isOpen ? "folder_opened" : "folder") : "file"} /> */}
+            {isDir ? <DirIcon dirName={file.name} isOpen={isOpen}/> :<FileIcon fileType={file.fileType}  />}
+            
             {file.name}
         </div>
 

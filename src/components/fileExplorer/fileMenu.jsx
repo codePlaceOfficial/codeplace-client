@@ -1,7 +1,7 @@
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import React, { useState, useEffect } from 'react'
-import {eventEmitter} from "common/virtualFileClient"
+import { eventEmitter } from "common/virtualFileClient"
 
 const virtualFileEvent = require("submodules/virtualFileEvent")
 export default function FileMenu(props) {
@@ -20,18 +20,18 @@ export default function FileMenu(props) {
         }
         if (serveFile) {
             let items = [{
-                label: "rename", handler: () => {
+                label: "重命名", handler: () => {
                     let newName = prompt("请输入名称");
                     eventEmitter.emitEvent(virtualFileEvent.generateEvent.renameFileEvent(serveFile.__path, newName))
                 },
             }, {
-                label: "delete", handler: () => {
+                label: "删除", handler: () => {
                     eventEmitter.emitEvent(virtualFileEvent.generateEvent.deleteFileEvent(serveFile.__path))
                 },
             }]
 
-            if (serveFile.type === "DIR") {
-                items = ([{
+            if (serveFile.type === "DIR" || serveFile.type === "root") {
+                let newItems = [{
                     label: "新建文件", handler: () => {
                         let name = prompt("请输入名称");
                         eventEmitter.emitEvent(virtualFileEvent.generateEvent.createFileEvent(serveFile.__path, name))
@@ -41,7 +41,10 @@ export default function FileMenu(props) {
                         let name = prompt("请输入名称");
                         eventEmitter.emitEvent(virtualFileEvent.generateEvent.createDirEvent(serveFile.__path, name))
                     },
-                }, ...items])
+                }]
+                if (serveFile.type === "DIR")
+                    items = [...newItems, ...items]
+                else items = newItems;
             }
 
             setmenuItems(items);

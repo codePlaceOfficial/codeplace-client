@@ -2,7 +2,7 @@ import react, { useEffect, useState } from "react"
 import DeleteIcon from './DeleteIcon';
 import 'overlayscrollbars/css/OverlayScrollbars.css';
 import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
-import FileIcon from "../fileIcon"
+import {FileIcon} from "../fileIcon"
 const classNames = require('classnames');
 export function Tabs(props) {
     const { children, index, onChange } = props;
