@@ -1,7 +1,7 @@
 import React from 'react';
 
 const icons = {};
-const iconsContext = require.context("/resource/fileIcons", false, /\.svg$/)
+const iconsContext = require.context("resource/icons/fileIcons", false, /\.svg$/)
 iconsContext.keys().forEach(icon => {
   let index = [icon.indexOf("./"), icon.lastIndexOf(".svg")]
   let name = icon.substring(index[0] + 2, index[1]);
@@ -19,7 +19,6 @@ export const FileIcon = (props) => {
 
 export const DirIcon = (props) => {
   const { dirName, isOpen } = props;
-  console.log(`folder-${dirName}${isOpen ? "-open" : ""}`);
   const iconSrc = icons[`folder-${dirName}${isOpen ? "-open" : ""}`] || icons[`folder-default${isOpen ? "-open" : ""}`]
   return __icon(iconSrc);
 }

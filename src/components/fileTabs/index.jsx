@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Tabs, Tab } from "./tabs"
 import "./index.scss"
 
-import { selectOpenFilesPath, closeFile, setworkFilePath, selectworkFilePath, selectOpenFiles,selectEditorContents } from "redux/reducer/sandbox"
+import { selectOpenFilesPath, closeFile, setworkFilePath, selectworkFilePath, selectOpenFiles, selectEditorContents } from "redux/reducer/sandbox"
 import { useDispatch, useSelector } from 'react-redux';
 import _ from "loadsh"
 
@@ -17,9 +17,10 @@ export default function ScrollableTabsButtonForce() {
 
     const tabs = useMemo(() => {
         return openFiles.map((file) => {
-            return { __path: file.__path, name: file.name,isChange:editorContents[file.__path]?.isChange };
+            console.log(file);
+            return { __path: file.__path, fileType: file.fileType, name: file.name, isChange: editorContents[file.__path]?.isChange };
         })
-    }, [openFiles,editorContents])
+    }, [openFiles, editorContents])
 
 
     useEffect(() => {
@@ -53,18 +54,18 @@ export default function ScrollableTabsButtonForce() {
         <>
 
             <div className='c_fileTabs_wrapper'>
-                    <Tabs
-                        index={value}
-                        onChange={handleChange}
-                    >
-                        {tabs?.map((tab, index) => {
-                            return <Tab key={tab.__path} name={tab.name} isChange={tab.isChange} onClose={
-                                () => {
-                                    dispatch(closeFile({ path: tab.__path }));
-                                }
-                            } />
-                        })}
-                    </Tabs>
+                <Tabs
+                    index={value}
+                    onChange={handleChange}
+                >
+                    {tabs?.map((tab, index) => {
+                        return <Tab key={tab.__path} fileType={tab.fileType} name={tab.name} isChange={tab.isChange} onClose={
+                            () => {
+                                dispatch(closeFile({ path: tab.__path }));
+                            }
+                        } />
+                    })}
+                </Tabs>
             </div>
         </>
     );

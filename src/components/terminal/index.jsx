@@ -11,6 +11,9 @@ function WebTerminal(props, parentRef) {
     const terminal = createRef();
     const { onData } = props;
     const xterm = useMemo(() => new Terminal(
+        {
+            'theme': { background: '#1e1e1e' }
+        }
     ), [])
     const fitAddon = useMemo(() => new FitAddon(), [])
     const erd = useMemo(() => {

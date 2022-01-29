@@ -3,26 +3,18 @@ import { MenuContext, ListFile } from "./index";
 import { openFile } from "redux/reducer/sandbox"
 import { useDispatch } from 'react-redux';
 import { eventEmitter } from "common/virtualFileClient"
-import {FileIcon,DirIcon} from "components/fileIcon"
+import { FileIcon, DirIcon } from "components/fileIcon"
+
+import arror from "resource/icons/arror.svg";
 
 const virtualFileEvent = require("submodules/virtualFileEvent")
 
 export default function File(props) {
     const { file } = props
     const [isOpen, setOpen] = useState(true);
-    // const [isDragHover, setDragHover] = useState(false);
     const { setMenu } = useContext(MenuContext);
     const isDir = file.type === "DIR" ? true : false;
     const dispatch = useDispatch();
-    // const dragOver = _.throttle((e) => {
-    //     e.preventDefault()
-    //     e.stopPropagation()
-    //     console.log(e);
-    //     setDragHover(true);
-    //     if (e.dataTransfer.getData("path") === file.__path) return;
-    //     setOpen(true);
-    // },1000,{ 'trailing': false })
-
     const click = (type, e) => {
         if (type === 0) {
             // 左键
@@ -48,38 +40,17 @@ export default function File(props) {
             e.preventDefault();
             click(1, e);
         }}
-
-    // style={{
-    //     marginLeft:isDir ? "50px" : "0px"
-    // }}
-
-    // draggable="true"
-    // onDragOver={isDir ? dragOver : null}
-    // onDragLeave={
-    //     () => {
-    //         setDragHover(false);
-    //     }
-    // }
-    // onDragStart={e => {
-    //     e.stopPropagation()
-    //     e.dataTransfer.setData("path", file.__path)
-    // }}
-    // onDrop={isDir ? e => {
-    //     e.preventDefault()
-    //     e.stopPropagation()
-    //     dragOver.cancel();
-    //     setDragHover(false);
-    // } : null}
     >
         <div className="item">
-            {isDir ? <svg className="icon" style={{
-                transform: isOpen ? `rotate(90deg)` : ""
-            }} aria-hidden="true">
-                <use xlinkHref="#icon-arror_r"></use>
-            </svg> : ""}
-            {/* <FileIcon name={isDir ? (isOpen ? "folder_opened" : "folder") : "file"} /> */}
-            {isDir ? <DirIcon dirName={file.name} isOpen={isOpen}/> :<FileIcon fileType={file.fileType}  />}
-            
+            {isDir ?
+                <img className='icon' style={{
+                    width:"12px",
+                    marginRight:"2px",
+                    transform: isOpen ? `rotate(90deg)` : ""
+                }} src={arror} alt="" />
+                : ""}
+            {isDir ? <DirIcon dirName={file.name} isOpen={isOpen} /> : <FileIcon fileType={file.fileType} />}
+
             {file.name}
         </div>
 

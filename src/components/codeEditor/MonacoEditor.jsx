@@ -46,7 +46,7 @@ export default function CodeEditor(props) {
         openFiles.forEach(file => {
             if (!models.current[file.__path]) {
                 // 新打开了文件
-                let newModel = monaco.editor.createModel(file.content);
+                let newModel = monaco.editor.createModel(file.content,file.fileType);
                 models.current[file.__path] = newModel;
                 // dispatch(setEditorContent({ path: file.__path, content: newModel.getValue() }))
                 // 监听model内容变化,将变化写入model中
@@ -55,6 +55,7 @@ export default function CodeEditor(props) {
                 })
                 editorRef.current.setModel(newModel);
             } else {
+                monaco.editor.setModelLanguage(models.current[file.__path],file.fileType);
                 if (file.content !== models.current[file.__path].getValue()){
                     dispatch(setEditorContent({ path: file.__path, content: file.content }))
                 }

@@ -33,14 +33,14 @@ export function Tabs(props) {
 }
 
 export function Tab(props) {
-    const { onClick, onClose, active, name,isChange } = props;
+    const { onClick, onClose, active, name,isChange,fileType } = props;
     
 
     return (
         <div className={classNames("tab", { "active": active, "change": isChange  })} onClick={onClick}>
             <div className="left">
-                <FileIcon name="file" />
-            </div>
+                <FileIcon fileType={fileType} />
+            </div>  
             <div className="label">{name}</div>
             <div className="right">
                 {/* temp */}

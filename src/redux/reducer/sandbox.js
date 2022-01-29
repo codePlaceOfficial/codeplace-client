@@ -34,90 +34,92 @@ export const slice = createSlice({
     initialState: {
         sandboxState: "disconnect", // connected,disconnect
         // files: {},
-        // files: {
-        //     type: "DIR",
-        //     name: "",
-        //     __path: "/",
-        //     children: [
-        //         { type: "FILE", name: "file1.txt", __path: "/file1.txt" },
-        //         { type: "FILE", name: "file2.txt", __path: "/file2.txt" },
-        //         { type: "DIR", name: "dir1", __path: "/dir1", children: [] },
-        //         {
-        //             type: "DIR",
-        //             name: "dir2",
-        //             __path: "/dir2",
-        //             children: [
-        //                 {
-        //                     type: "FILE",
-        //                     name: "file3.txt",
-        //                     __path: "/dir2/file3.txt",
-        //                 },
 
-        //                 {
-        //                     type: "DIR",
-        //                     name: "dir2",
-        //                     __path: "/dir2/dir2",
-        //                     children: [
-        //                         {
-        //                             type: "FILE",
-        //                             name: "file3.txt",
-        //                             __path: "/dir2/dir2/file3.txt",
-        //                         },
-        //                     ],
-        //                 },
-        //             ],
-        //         },
-        //         {
-        //             type: "DIR",
-        //             name: "dir3",
-        //             __path: "/dir3",
-        //             children: [
-        //                 {
-        //                     type: "FILE",
-        //                     name: "file4.txt",
-        //                     __path: "/dir3/file4.txt",
-        //                 },
-        //             ],
-        //         }
-        //     ]
-        // },
-        // 打开的文件
+
         files: {
             type: "DIR",
             name: "",
             __path: "/",
             children: [
-                { type: "FILE", name: "file",fileType:"javascript",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"coffee",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"cpp",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"csharp",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"css",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"dart",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"go",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"html",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"java",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"less",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"lua",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"markdown",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"php",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"pug",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"python",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"redis",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"ruby",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"rust",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"sass",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"shell",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"typescript",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"xml",__path:Math.random() * 1000000 },
-                { type: "FILE", name: "file",fileType:"yaml",__path:Math.random() * 1000000 },
+                { type: "FILE", name: "file1.txt", __path: "/file1.txt" },
+                { type: "FILE", name: "file2.txt", __path: "/file2.txt" ,fileType:"javascript"},
+                { type: "DIR", name: "dir1", __path: "/dir1", children: [] },
+                {
+                    type: "DIR",
+                    name: "dir2",
+                    __path: "/dir2",
+                    children: [
+                        {
+                            type: "FILE",
+                            name: "file3.txt",
+                            __path: "/dir2/file3.txt",
+                        },
 
-                { type: "DIR", name: "src",children:[],__path:Math.random() * 1000000 },
-
+                        {
+                            type: "DIR",
+                            name: "dir2",
+                            __path: "/dir2/dir2",
+                            children: [
+                                {
+                                    type: "FILE",
+                                    name: "file3.txt",
+                                    __path: "/dir2/dir2/file3.txt",
+                                },
+                            ],
+                        },
+                    ],
+                },
+                {
+                    type: "DIR",
+                    name: "dir3",
+                    __path: "/dir3",
+                    children: [
+                        {
+                            type: "FILE",
+                            name: "file4.txt",
+                            __path: "/dir3/file4.txt",
+                        },
+                    ],
+                }
             ]
         },
+        // 打开的文件
+        // files: {
+        //     type: "DIR",
+        //     name: "",
+        //     __path: "/",
+        //     children: [
+        //         { type: "FILE", name: "file",fileType:"javascript",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"coffee",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"cpp",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"csharp",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"css",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"dart",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"go",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"html",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"java",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"less",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"lua",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"markdown",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"php",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"pug",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"python",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"redis",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"ruby",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"rust",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"sass",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"shell",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"typescript",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"xml",__path:Math.random() * 1000000 },
+        //         { type: "FILE", name: "file",fileType:"yaml",__path:Math.random() * 1000000 },
+
+        //         { type: "DIR", name: "src",children:[],__path:Math.random() * 1000000 },
+
+        //     ]
+        // },
         openFilesPath: [
             // path
-            "/file2.txt","/dir2/dir2/file3.txt","/dir3/file4.txt"
+            // "/file2.txt", "/dir2/dir2/file3.txt", "/dir3/file4.txt"
         ],
         workFilePath: null, // 当前正在浏览的文件
         editorContents: {} // 编辑器中的值
@@ -198,7 +200,7 @@ export const selectOpenFiles = createSelector([selectFiles, selectOpenFilesPath]
     for (let filePath of openFilesPath) {
         let { targetObj } = getVirtualFileByPath(filePath, files);
         if (targetObj) {
-            openFiles.push({ __path: targetObj.__path, name: targetObj.name, content: targetObj.content });
+            openFiles.push({ ...targetObj });
         }
     }
 

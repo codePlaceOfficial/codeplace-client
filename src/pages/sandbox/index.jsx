@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import FileExplorer from 'components/fileExplorer'
 import FileTabs from "components/fileTabs"
 import Terminal from "components/terminal"
@@ -10,20 +10,32 @@ import { eventEmitter } from "common/virtualFileClient"
 import CodeEditor from 'components/codeEditor';
 import "./index.scss"
 
+import logo from "resource/icons/logo.svg"
 const virtualFileEvent = require("submodules/virtualFileEvent")
 const _ = require("loadsh")
 
 
 // 把tabs和Editor合起来
 const EditorPanel = () => {
+  const openFilesPath = useSelector(selectOpenFilesPath);
+  const hasFilesOpened = useMemo(() => {
+    return openFilesPath.length > 0;
+  }, [openFilesPath])
   return (
     <div className='editorPanel'>
-      <div className="editorPanel_tabs_wrapper">
-        <FileTabs />
-      </div>
-      <div className="editorPanel_editor_wrapper">
-        <CodeEditor></CodeEditor>
-      </div>
+      {hasFilesOpened ?
+        (
+          <>
+            <div className="editorPanel_tabs_wrapper">
+              <FileTabs />
+            </div>
+            <div className="editorPanel_editor_wrapper">
+              <CodeEditor></CodeEditor>
+            </div>
+          </>) :
+        <div className="editorBackground">
+          <img className='logo' src={logo} alt="" />
+        </div>}
     </div>)
 }
 function Sandbox() {

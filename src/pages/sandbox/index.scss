@@ -4,10 +4,25 @@
 	overflow: hidden;
 	display: flex;
 	flex-direction: column;
-    .editorPanel_tabs_wrapper{
-        height: 40px;
-    }
+	.editorPanel_tabs_wrapper {
+		height: 40px;
+	}
 	.editorPanel_editor_wrapper {
-        height: calc(100% - 40px);
+		height: calc(100% - 40px);
+	}
+
+	.editorBackground {
+		background-color: #1e1e1e;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		.logo{
+			width: 10vw;
+			height: 10vw;
+			fill: currentColor;
+			color:#1e1e1e;
+		}
 	}
 }
