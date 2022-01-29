@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import * as monaco from 'monaco-editor'
 
-import { selectworkFilePath, setEditorContent, selectEditorContents, selectOpenFiles } from "redux/reducer/sandbox"
+import { selectWorkFilePath, setEditorContent, selectEditorContents, selectOpenFiles } from "redux/reducer/sandbox"
 import { useSelector, useDispatch } from 'react-redux';
 import _ from "loadsh"
 import {eventEmitter} from "common/virtualFileClient"
@@ -11,7 +11,7 @@ export default function CodeEditor(props) {
     const editorContainerRef = useRef(null);
     const editorRef = useRef(null);
     const models = useRef({});
-    const workFilePath = useSelector(selectworkFilePath);
+    const workFilePath = useSelector(selectWorkFilePath);
     const dispatch = useDispatch();
     const editorContents = useSelector(selectEditorContents)
 

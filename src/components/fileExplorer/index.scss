@@ -1,22 +1,25 @@
 .c_fileExplorer_wrapper {
 	user-select: none;
-	background-color: #252525;
+	background-color: #252526;
 	color: white;
 	height: 100%;
 	width: 100%;
 	.dir {
-		.item~* {
-			padding-left: 20px;
+		&.dragHover {
+			background-color: #999;
 		}
-
-        &.dragHover{
-            background-color: #999;
-        }
 	}
 
 	.file,
-	.dir{
-		& .item{
+	.dir {
+		cursor: pointer;
+		& .item {
+			padding: 2px 0;
+
+			&:hover,
+			&.active {
+				background-color: #37373d;
+			}
 			display: flex;
 			align-items: center;
 		}

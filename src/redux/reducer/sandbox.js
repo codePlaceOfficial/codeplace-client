@@ -119,7 +119,7 @@ export const slice = createSlice({
         // },
         openFilesPath: [
             // path
-            // "/file2.txt", "/dir2/dir2/file3.txt", "/dir3/file4.txt"
+            "/file2.txt", "/dir2/dir2/file3.txt", "/dir3/file4.txt"
         ],
         workFilePath: null, // 当前正在浏览的文件
         editorContents: {} // 编辑器中的值
@@ -192,7 +192,7 @@ export const { openFile, closeFile, setSandboxState, setFiles, setworkFilePath, 
 export const selectFiles = state => state.sandbox.files
 export const selectOpenFilesPath = state => state.sandbox.openFilesPath
 export const selectSandboxState = state => state.sandbox.sandboxState
-export const selectworkFilePath = state => state.sandbox.workFilePath
+export const selectWorkFilePath = state => state.sandbox.workFilePath
 export const selectEditorContents = state => state.sandbox.editorContents
 
 export const selectOpenFiles = createSelector([selectFiles, selectOpenFilesPath], (files, openFilesPath) => {

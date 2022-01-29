@@ -1,18 +1,17 @@
-import React, { useState } from 'react'
+import React, {useState } from 'react'
 import "./index.scss"
 import File from "./file"
 import FileMenu from "./fileMenu"
 import { useSelector } from 'react-redux';
 import { selectFiles } from "redux/reducer/sandbox"
 
-// todo 在最外层增加事件
 const ListFile = (props) => {
-    const { fileList } = props
+    const { fileList,deep } = props
     if (!fileList || fileList.length === 0) return null;
     return (
         fileList?.map(
             file => {
-                return <File key={file.__path} file={file}></File>
+                return <File key={file.__path} file={file} deep={deep}></File>
             }
         )
     )
@@ -34,7 +33,7 @@ export default function Wrapper() {
                 }}
             >
                 <FileMenu menuConfig={menuConfig}></FileMenu>
-                <ListFile fileList={files?.children}></ListFile>
+                <ListFile fileList={files?.children} deep={0}></ListFile>
             </div>
         </MenuContext.Provider>
     )

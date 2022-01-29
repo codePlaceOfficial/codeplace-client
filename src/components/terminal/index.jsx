@@ -1,4 +1,4 @@
-import React, { createRef, useEffect, useMemo, useImperativeHandle, useCallback } from 'react'
+import React, { createRef, useEffect, useMemo, useImperativeHandle } from 'react'
 import { Terminal } from 'xterm';
 import 'xterm/css/xterm.css'
 import { sandboxSocket } from "api/socket"

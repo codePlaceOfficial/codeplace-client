@@ -1,20 +1,30 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { MenuContext, ListFile } from "./index";
-import { openFile } from "redux/reducer/sandbox"
-import { useDispatch } from 'react-redux';
+import { openFile, selectWorkFilePath } from "redux/reducer/sandbox"
+import { useDispatch, useSelector } from 'react-redux';
 import { eventEmitter } from "common/virtualFileClient"
 import { FileIcon, DirIcon } from "components/fileIcon"
-
 import arror from "resource/icons/arror.svg";
+import classNames from 'classnames';
+
 
 const virtualFileEvent = require("submodules/virtualFileEvent")
 
 export default function File(props) {
-    const { file } = props
-    const [isOpen, setOpen] = useState(true);
+    const { file, deep } = props
+    const [isOpen, setOpen] = useState(false);
     const { setMenu } = useContext(MenuContext);
     const isDir = file.type === "DIR" ? true : false;
     const dispatch = useDispatch();
+    const workFilePath = useSelector(selectWorkFilePath);
+
+    useEffect(() => {
+        // 自动打开文件夹
+        if(workFilePath?.startsWith(file.__path)){
+            setOpen(true);
+        }
+    },[workFilePath,file])
+
     const click = (type, e) => {
         if (type === 0) {
             // 左键
@@ -40,12 +50,17 @@ export default function File(props) {
             e.preventDefault();
             click(1, e);
         }}
+
     >
-        <div className="item">
+        <div
+            style={{ paddingLeft: `${deep * 15}px` }}
+            className={classNames("item", { "active": file.__path === workFilePath })}
+        >
+
             {isDir ?
                 <img className='icon' style={{
-                    width:"12px",
-                    marginRight:"2px",
+                    width: "12px",
+                    marginRight: "2px",
                     transform: isOpen ? `rotate(90deg)` : ""
                 }} src={arror} alt="" />
                 : ""}
@@ -54,6 +69,6 @@ export default function File(props) {
             {file.name}
         </div>
 
-        {(isDir && isOpen === true) ? <ListFile fileList={file?.children}></ListFile> : ""}
+        {(isDir && isOpen === true) ? <ListFile fileList={file?.children} deep={deep + 1}></ListFile> : ""}
     </div>
 }
