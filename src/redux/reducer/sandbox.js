@@ -15,7 +15,7 @@ import { eventEmitter } from "common/virtualFileClient"
 const virtualFileEvent = require("submodules/virtualFileEvent")
 const { EVENT_TYPE } = virtualFileEvent;
 
-const _closeFile = (state, {path}) => {
+const _closeFile = (state, { path }) => {
     state.openFilesPath = state.openFilesPath.filter((openPath, index) => {
         return openPath !== path
     })
@@ -23,7 +23,7 @@ const _closeFile = (state, {path}) => {
         state.workFilePath = state.openFilesPath[0];
     }
 }
-const _deleteEditorContent = (state, {virtualPath}) => {
+const _deleteEditorContent = (state, { virtualPath }) => {
     if (!!state.editorContents[virtualPath]) {
         delete state.editorContents[virtualPath]
     }
@@ -33,35 +33,7 @@ export const slice = createSlice({
     name: 'sandbox',
     initialState: {
         sandboxState: "disconnect", // connected,disconnect
-        files: {
-            name:"",
-            path:"/",
-            children:[
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-                {name:Math.random() * 1000000, path:Math.random() * 1000000},
-            ]
-        },
+        files: {},
         openFilesPath: [
         ],
         workFilePath: null, // 当前正在浏览的文件
@@ -75,7 +47,7 @@ export const slice = createSlice({
                 state.openFilesPath.push(actions.payload.path)
             }
         },
-        closeFile: (state,actions) => _closeFile(state,actions.payload),
+        closeFile: (state, actions) => _closeFile(state, actions.payload),
         setSandboxState: (state, actions) => {
             state.sandboxState = actions.payload.state;
         },
@@ -85,7 +57,7 @@ export const slice = createSlice({
         setworkFilePath: (state, actions) => {
             state.workFilePath = actions.payload.path
         },
-        deleteEditorContent: (state,actions) => _deleteEditorContent(state,actions.payload),
+        deleteEditorContent: (state, actions) => _deleteEditorContent(state, actions.payload),
         setEditorContent: (state, actions) => {
             // selector是根据===比较对象是否相同的,已有对象的话就不创建了,防止进入死循环
             if (!state.editorContents[actions.payload.path]) {
@@ -106,20 +78,20 @@ export const slice = createSlice({
                     break;
                 case EVENT_TYPE.renameFile:
                     const oldPath = event.data.virtualPath;
-                    const {newPath} = renameFile(event.data.virtualPath, event.data.newName, state.files)
+                    const { newPath } = renameFile(event.data.virtualPath, event.data.newName, state.files)
                     state.openFilesPath.filter((path) => path !== oldPath);
                     state.openFilesPath = state.openFilesPath.map((path) => {
-                        if(oldPath === path) return newPath;
+                        if (oldPath === path) return newPath;
                         return path;
                     })
-                    if(state.editorContents[oldPath]){
+                    if (state.editorContents[oldPath]) {
                         state.editorContents[newPath].content = state.editorContents[oldPath].content;
                         delete state.editorContents[oldPath];
                     }
                     break;
                 case EVENT_TYPE.deleteFile:
-                    _closeFile(state, {path:event.data.virtualPath});
-                    _deleteEditorContent(state, {virtualPath:event.data.virtualPath})
+                    _closeFile(state, { path: event.data.virtualPath });
+                    _deleteEditorContent(state, { virtualPath: event.data.virtualPath })
                     deleteFile(event.data.virtualPath, state.files)
                     break;
                 case EVENT_TYPE.moveFile:
@@ -155,7 +127,7 @@ export const selectOpenFiles = createSelector([selectFiles, selectOpenFilesPath]
     for (let filePath of openFilesPath) {
         let { targetObj } = getVirtualFileByPath(filePath, files);
         if (targetObj) {
-            openFiles.push({ ...targetObj});
+            openFiles.push({ ...targetObj });
         }
     }
 
