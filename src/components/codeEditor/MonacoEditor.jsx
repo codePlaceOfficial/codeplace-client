@@ -24,6 +24,7 @@ export default function CodeEditor(props) {
 
     useEffect(() => {
         editorRef.current.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, function () {
+            console.log(workFilePath, models.current[workFilePath].getValue());
             eventEmitter.emitEvent(virtualFileEvent.generateEvent.setFileContentEvent(workFilePath, models.current[workFilePath].getValue()))
         })
     }, [workFilePath])
@@ -32,7 +33,7 @@ export default function CodeEditor(props) {
 
     useEffect(() => {
         _.forIn(editorContents, (data, path) => {
-            if (models.current[path].getValue() !== data.content)
+            if (models.current[path]?.getValue() !== data.content)
                 data.content && models.current[path].setValue(data.content);
         })
     }, [editorContents])

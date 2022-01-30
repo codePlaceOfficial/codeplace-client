@@ -6,13 +6,9 @@ import Layout from './Layout';
 import { sandboxSocket } from "api/socket"
 import { setSandboxState, setFiles, selectOpenFilesPath, selectSandboxState, execFileEvent } from "redux/reducer/sandbox"
 import { useDispatch, useSelector } from 'react-redux';
-import { eventEmitter } from "common/virtualFileClient"
 import CodeEditor from 'components/codeEditor';
 import "./index.scss"
-
 import logo from "resource/icons/logo.svg"
-const virtualFileEvent = require("submodules/virtualFileEvent")
-const _ = require("loadsh")
 
 
 // 把tabs和Editor合起来
@@ -40,26 +36,6 @@ const EditorPanel = () => {
 }
 function Sandbox() {
   const dispatch = useDispatch();
-  const openFilesPath = useSelector(selectOpenFilesPath);
-  const sandboxState = useSelector(selectSandboxState);
-  // 监听，只更改已打开文件的内容
-  useEffect(
-    () => {
-      if (sandboxState === "ready") {
-        eventEmitter.subscribe(virtualFileEvent.EVENT_TYPE.fileChange, (data) => {
-          if (_.indexOf(openFilesPath, data.virtualPath) !== -1) { // 如果改变的文件内容，在打开的文件之中，就更新
-            eventEmitter.emitEvent(virtualFileEvent.generateEvent.getFileContentEvent(data.virtualPath));
-          }
-        })
-
-        // eventEmitter.subscribe(virtualFileEvent.EVENT_TYPE.deleteFile, (data) => {
-        //   console.log(data);
-        //   dispatch(deleteFile({virtualPath:data.virtualPath}))
-        // })
-      }
-    }, [sandboxState, openFilesPath, dispatch]
-  )
-
   useEffect(() => {
     sandboxSocket.on("connect", () => {
       // todo 改变状态
