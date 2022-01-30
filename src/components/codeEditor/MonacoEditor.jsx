@@ -24,7 +24,6 @@ export default function CodeEditor(props) {
 
     useEffect(() => {
         editorRef.current.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, function () {
-            console.log(workFilePath, models.current[workFilePath].getValue());
             eventEmitter.emitEvent(virtualFileEvent.generateEvent.setFileContentEvent(workFilePath, models.current[workFilePath].getValue()))
         })
     }, [workFilePath])
@@ -47,9 +46,9 @@ export default function CodeEditor(props) {
         openFiles.forEach(file => {
             if (!models.current[file.__path]) {
                 // 新打开了文件
-                let newModel = monaco.editor.createModel(file.content,file.fileType);
+                let newModel = monaco.editor.createModel(file.content,file.fileType || "");
                 models.current[file.__path] = newModel;
-                // dispatch(setEditorContent({ path: file.__path, content: newModel.getValue() }))
+                dispatch(setEditorContent({ path: file.__path, content: newModel.getValue()}))
                 // 监听model内容变化,将变化写入model中
                 newModel.onDidChangeContent((event) => {
                     dispatch(setEditorContent({ path: file.__path, content: newModel.getValue() }))

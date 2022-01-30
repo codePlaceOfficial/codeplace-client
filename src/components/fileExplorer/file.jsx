@@ -65,8 +65,7 @@ export default function File(props) {
                 }} src={arror} alt="" />
                 : ""}
             {isDir ? <DirIcon dirName={file.name} isOpen={isOpen} /> : <FileIcon fileType={file.fileType} />}
-
-            {file.name}
+            <p>{file.name}</p>
         </div>
 
         {(isDir && isOpen === true) ? <ListFile fileList={file?.children} deep={deep + 1}></ListFile> : ""}

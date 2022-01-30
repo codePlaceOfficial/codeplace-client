@@ -33,7 +33,35 @@ export const slice = createSlice({
     name: 'sandbox',
     initialState: {
         sandboxState: "disconnect", // connected,disconnect
-        files: {},
+        files: {
+            name:"",
+            path:"/",
+            children:[
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+                {name:Math.random() * 1000000, path:Math.random() * 1000000},
+            ]
+        },
         openFilesPath: [
         ],
         workFilePath: null, // 当前正在浏览的文件
