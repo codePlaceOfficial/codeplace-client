@@ -12,14 +12,14 @@ export default function ScrollableTabsButtonForce() {
     const openFilesPath = useSelector(selectOpenFilesPath);
     const workFilePath = useSelector(selectWorkFilePath);
     const openFiles = useSelector(selectOpenFiles);
-    const editorContents = useSelector(selectEditorContents);
+    const editorContents = useSelector(selectEditorContents)
     const dispatch = useDispatch();
 
     const tabs = useMemo(() => {
         return openFiles.map((file) => {
-            return { __path: file.__path, fileType: file.fileType, name: file.name, isChange: editorContents[file.__path]?.isChange };
+            return { __path: file.__path, fileType: file.fileType, name: file.name, isChange: editorContents[file.__path]?.content !== file.content};
         })
-    }, [openFiles, editorContents])
+    }, [openFiles,editorContents])
 
 
     useEffect(() => {

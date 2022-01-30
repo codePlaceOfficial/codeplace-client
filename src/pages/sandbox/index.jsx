@@ -4,7 +4,7 @@ import FileTabs from "components/fileTabs"
 import Terminal from "components/terminal"
 import Layout from './Layout';
 import { sandboxSocket } from "api/socket"
-import { setSandboxState, setFiles, selectOpenFilesPath, selectSandboxState, execFileEvent } from "redux/reducer/sandbox"
+import { setSandboxState, setFiles, selectOpenFilesPath, execFileEvent } from "redux/reducer/sandbox"
 import { useDispatch, useSelector } from 'react-redux';
 import CodeEditor from 'components/codeEditor';
 import "./index.scss"

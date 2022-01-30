@@ -67,9 +67,6 @@ export const slice = createSlice({
                 if (state.editorContents[actions.payload.path].content !== actions.payload.content)
                     state.editorContents[actions.payload.path].content = actions.payload.content;
             }
-            let { targetObj } = getVirtualFileByPath(actions.payload.path, state.files);
-            // 判断内容是否被修改过
-            state.editorContents[actions.payload.path].isChange = actions.payload.content !== targetObj.content;
         },
         execFileEvent: (state, actions) => {
             const { event } = actions.payload;
@@ -121,7 +118,7 @@ export const selectOpenFiles = createSelector([selectFiles, selectOpenFilesPath]
     for (let filePath of openFilesPath) {
         let { targetObj } = getVirtualFileByPath(filePath, files);
         if (targetObj) {
-            openFiles.push({ ...targetObj });
+            openFiles.push({ ...targetObj});
         }
     }
 

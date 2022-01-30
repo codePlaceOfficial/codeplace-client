@@ -34,7 +34,7 @@ export default function CodeEditor(props) {
     useEffect(() => {
         _.forIn(editorContents, (data, path) => {
             if (models.current[path]?.getValue() !== data.content)
-                data.content && models.current[path].setValue(data.content);
+                data.content && models.current[path]?.setValue(data.content);
         })
     }, [editorContents])
 
