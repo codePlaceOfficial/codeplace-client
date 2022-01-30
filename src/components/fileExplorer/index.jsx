@@ -5,6 +5,24 @@ import FileMenu from "./fileMenu"
 import { useSelector } from 'react-redux';
 import { selectFiles } from "redux/reducer/sandbox"
 
+
+// export const themeOptions: ThemeOptions = {
+//   palette: {
+//     type: 'dark',
+//     primary: {
+//       main: '#3f51b5',
+//     },
+//     secondary: {
+//       main: '#f50057',
+//     },
+//   },
+// };
+
+// const theme = createTheme({
+//     palette: {
+//         type: 'dark'
+//     }
+// })
 const ListFile = (props) => {
     const { fileList, deep } = props
     if (!fileList || fileList.length === 0) return null;
@@ -22,21 +40,21 @@ export default function Wrapper() {
     const [menuConfig, setMenu] = useState(null)
     return (
         <MenuContext.Provider value={{ setMenu }}>
-            <div
-                className='c_fileExplorer_wrapper'
-                onContextMenu={(e) => {
-                    e.preventDefault();
-                    setMenu({
-                        position: { x: e.clientX, y: e.clientY }, serveFile: {
-                            type: "root",
-                            __path: "/"
-                        }
-                    })
-                }}
-            >
-                <FileMenu menuConfig={menuConfig}></FileMenu>
-                <ListFile fileList={files?.children} deep={0}></ListFile>
-            </div>
+                <div
+                    className='c_fileExplorer_wrapper'
+                    onContextMenu={(e) => {
+                        e.preventDefault();
+                        setMenu({
+                            position: { x: e.clientX, y: e.clientY }, serveFile: {
+                                type: "root",
+                                __path: "/"
+                            }
+                        })
+                    }}
+                >
+                    <FileMenu menuConfig={menuConfig}></FileMenu>
+                    <ListFile fileList={files?.children} deep={0}></ListFile>
+                </div>
         </MenuContext.Provider >
     )
 }
