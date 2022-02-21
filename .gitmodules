@@ -1,0 +1,11 @@
+# git submodule init
+# git submodule update
+
+[submodule "src/submodules/virtualFileClient"]
+	path = src/submodules/virtualFileClient
+	url = https://github.com/codePlaceOfficial/virtualFileClient.git
+	branch = v0.1
+[submodule "src/submodules/virtualFileEvent"]
+	path = src/submodules/virtualFileEvent
+	url = https://github.com/codePlaceOfficial/virtualFileEvent.git
+	branch = v0.1
